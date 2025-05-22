@@ -23,6 +23,7 @@ mi_tibble <- tibble(
 
 # Mostrar el tibble
 print(mi_tibble)
+dim(mi_tibble)  # Dimensiones del tibble
 
 # Comparar con un data.frame clásico
 mi_dataframe <- data.frame(
@@ -33,6 +34,7 @@ mi_dataframe <- data.frame(
 
 # Mostrar el data.frame
 print(mi_dataframe)
+dim(mi_dataframe)  # Dimensiones del data.frame
 
 # 2. Conversión entre tibble y data.frame
 
@@ -52,7 +54,9 @@ class(tb)  # "tbl_df" "tbl" "data.frame"
 
 # Ver los primeros registros del conjunto de datos
 print(gapminder)
-
+dim(gapminder)  # Dimensiones del conjunto de datos
+gapminder <- as.data.frame(gapminder)  # Convertir a dataframe
+gapminder
 # Ver estructura con glimpse (dplyr)
 glimpse(gapminder)
 
@@ -66,7 +70,18 @@ resumen <- gapminder %>%
     poblacion_total = sum(pop)
   )
 
-print(resumen)
+print(resumen) # Calcula el promedio de 2007   
+
+resumentotal <- gapminder %>%
+  group_by(continent) %>%
+  summarise(
+    esperanza_vida_promedio = mean(lifeExp),
+    pib_percapita_promedio = mean(gdpPercap),
+    poblacion_total = sum(pop)
+  )
+
+print(resumentotal) #Calcula el promedio de todos los años
+
 
 # ========================
 # 4. Visualización con ggplot2
@@ -106,6 +121,10 @@ gapminder %>%
 
 # 6. Guardar el tibble en un archivo CSV
 write.csv(gapminder, "gapminder.csv", row.names = FALSE)
+# Verifica el directorio de trabajo actual
+getwd()
+# Si necesitas cambiarlo, usa:
+setwd("C:/Users/Andres C/OneDrive/Documentos/ing biologca/Programación de lenguajes estádisticos/ple_intro_github/tibble-gapminder")
 
 # 7. Leer el archivo CSV de nuevo
 gapminder_leido <- read.csv("gapminder.csv")
@@ -113,4 +132,22 @@ gapminder_leido <- read.csv("gapminder.csv")
 # 8. Verificar el tipo de datos en de gapminder_leido. Convertir a tibble
 # ...
 # Ingresa tu código aquí
-# ...
+class(gapminder_leido)  # Verifica la clase del objeto
+gapminder_leido <- as_tibble(gapminder_leido)  # Convertir a tibble 
+
+#cuantos continentes considera gapminder?
+
+length(unique(gapminder$continent))
+
+#cuantos paises considera gapminder?
+
+length(unique(gapminder$country))
+
+# numeros de paises por continente
+
+gapminder %>%
+  group_by(continent) %>%
+  summarise(
+    paises = length(unique(country))
+  )
+
